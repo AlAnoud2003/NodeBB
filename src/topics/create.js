@@ -134,11 +134,11 @@ module.exports = function (Topics) {
 		if (!Array.isArray(topics) || !topics.length) {
 			throw new Error('[[error:no-topic]]');
 		}
-
+		const topicData = topics[0];
 		if (uid > 0 && settings.followTopicsOnCreate) {
 			await Topics.follow(postData.tid, uid);
 		}
-		const topicData = topics[0];
+
 		topicData.unreplied = true;
 		topicData.mainPost = postData;
 		topicData.index = 0;
@@ -161,6 +161,7 @@ module.exports = function (Topics) {
 			topicData: topicData,
 			postData: postData,
 		};
+		
 	};
 
 	Topics.reply = async function (data) {
