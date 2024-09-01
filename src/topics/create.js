@@ -161,7 +161,6 @@ module.exports = function (Topics) {
 			topicData: topicData,
 			postData: postData,
 		};
-		
 	};
 
 	Topics.reply = async function (data) {
