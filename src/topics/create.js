@@ -131,40 +131,36 @@ module.exports = function (Topics) {
 			Topics.getTopicsByTids([postData.tid], uid),
 		]);
 
-	
 		if (!Array.isArray(topics) || !topics.length) {
-            throw new Error('[[error:no-topic]]');
-        }
+			throw new Error('[[error:no-topic]]');
+		}
 
-        if (uid > 0 && settings.followTopicsOnCreate) {
-            await Topics.follow(postData.tid, uid);
-        }
-        const topicData = topics[0];
-        topicData.unreplied = true;
-        topicData.mainPost = postData;
-        topicData.index = 0;
+		if (uid > 0 && settings.followTopicsOnCreate) {
+			await Topics.follow(postData.tid, uid);
+		}
+		const topicData = topics[0];
+		topicData.unreplied = true;
+		topicData.mainPost = postData;
+		topicData.index = 0;
+		postData.index = 0;
 
-        postData.index = 0;
+		if (topicData.scheduled) {
+			await Topics.delete(tid);
+		}
 
-        if (topicData.scheduled) {
-            await Topics.delete(tid);
-        }
+		analytics.increment(['topics', `topics:byCid:${topicData.cid}`]);
+		plugins.hooks.fire('action:topic.post', { topic: topicData, post: postData, data: data });
 
-        analytics.increment(['topics', `topics:byCid:${topicData.cid}`]);
-        plugins.hooks.fire('action:topic.post', { topic: topicData, post: postData, data: data });
+		if (parseInt(uid, 10) && !topicData.scheduled) {
+			user.notifications.sendTopicNotificationToFollowers(uid, topicData, postData);
+			Topics.notifyTagFollowers(postData, uid);
+			categories.notifyCategoryFollowers(postData, uid);
+		}
 
-        if (parseInt(uid, 10) && !topicData.scheduled) {
-            user.notifications.sendTopicNotificationToFollowers(uid, topicData, postData);
-            Topics.notifyTagFollowers(postData, uid);
-            categories.notifyCategoryFollowers(postData, uid);
-        }
-
-        return {
-            topicData: topicData,
-            postData: postData,
-        };
-    
-
+		return {
+			topicData: topicData,
+			postData: postData,
+		};
 	};
 
 	Topics.reply = async function (data) {
