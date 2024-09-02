@@ -115,11 +115,11 @@ module.exports = function (Topics) {
 		const cannotCreate = !canCreate;
 		const cannotTag = !canTag && data.tags.length;
 
-		console.log('Anoud: Refactored code executed');
-
 		if (cannotCreate || cannotTag) {
 			throw new Error('[[error:no-privileges]]');
 		}
+
+		console.log('Anoud: Refactored code executed');
 
 		await guestHandleValid(data);
 		if (!data.fromQueue) {
