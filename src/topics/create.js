@@ -15,6 +15,8 @@ const privileges = require('../privileges');
 const categories = require('../categories');
 const translator = require('../translator');
 
+console.log('Al Anoud');
+
 module.exports = function (Topics) {
 	Topics.create = async function (data) {
 		// This is an internal method, consider using Topics.post instead
@@ -112,6 +114,8 @@ module.exports = function (Topics) {
 		// Check if the user has the necessary privileges to create or tag
 		const cannotCreate = !canCreate;
 		const cannotTag = !canTag && data.tags.length;
+
+		console.log('Anoud: Refactored code executed');
 
 		if (cannotCreate || cannotTag) {
 			throw new Error('[[error:no-privileges]]');
