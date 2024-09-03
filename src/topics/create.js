@@ -119,7 +119,7 @@ module.exports = function (Topics) {
 			throw new Error('[[error:no-privileges]]');
 		}
 
-		console.log('Anoud: Refactored code executed');
+		console.log('Al Anoud: Refactored code executed');
 
 		await guestHandleValid(data);
 		if (!data.fromQueue) {
